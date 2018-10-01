@@ -1,0 +1,81 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script type="text/javascript" src="zepto.min.js"></script>
+<style type="text/css">
+video { 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    transform: translateX(-50%) translateY(-50%);
+ 
+  background-size: cover;
+  transition: 1s opacity;
+}
+</style>
+<video poster="arkaplan.jpg" controls autoplay id="play"></video>
+<style type="text/css">
+<!--
+body {
+	background-color: #666666;
+}
+-->
+</style><div id="msg"></div>
+<script type="text/javascript">
+window.currentVideo = null;
+var v = document.getElementById('play');
+var d = document.getElementById('msg');
+var speed = 1;
+function fetch(i) {
+	$.ajax({
+		url: 'next.php',
+		type: 'POST',
+		data: { i: i, c : window.currentVideo },
+		success: function(r) {
+			console.log(r);
+			v.src = './vids/' + r;
+			v.volume = 0.5;
+			window.currentVideo = r;
+		},
+		error: function(e) {
+			console.dir(e);
+			d.innerHTML = e.responseText;
+		}
+	});
+}
+v.addEventListener('ended', function() {
+	console.log('ended');
+	fetch('next');
+}, false);
+function speedUp() {
+	speed = speed * 2;
+	console.log(speed);
+	v.playbackRate = speed;
+}
+function slowDown() {
+	speed = speed / 2;
+	console.log(speed);
+	v.playbackRate = speed;
+}
+window.addEventListener('load', function() {
+	fetch('next');
+});
+window.addEventListener('click', function() {
+	fetch('next');
+});
+window.addEventListener('keydown', function(e) {
+	var f = e.keyCode;
+	console.log(f);
+	if (f == 39 || f == 183)
+		fetch('next');
+	if (f == 37 || f == 182)
+		fetch('prev');
+	if (f == 220)
+		slowDown();
+	if (f == 221)
+		speedUp();
+});
+</script>
