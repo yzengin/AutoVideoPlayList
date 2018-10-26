@@ -1,2 +1,2 @@
-# vidlist
-Tiny HTML5 video playlist viewer with keyboard shortcuts
+# Video List
+Klavye kısayollarına sahip HTML5 video oynatma listesi görüntüleyici
